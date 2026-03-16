@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CatchBox - Gotta track 'em all!</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23fff' stroke='%23333' stroke-width='4'/><path d='M 2 50 A 48 48 0 0 1 98 50 Z' fill='%23EE1515' stroke='%23333' stroke-width='4'/><rect x='2' y='47' width='96' height='6' fill='%23333'/><circle cx='50' cy='50' r='14' fill='%23fff' stroke='%23333' stroke-width='4'/><circle cx='50' cy='50' r='7' fill='%23fff' stroke='%23333' stroke-width='3'/></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Header / Pokédex top -->
+    <header class="pokedex-header">
+      <div class="header-top">
+        <div class="header-lens">
+          <div class="lens-big">
+            <div class="lens-shine"></div>
+          </div>
+          <div class="lens-small red"></div>
+          <div class="lens-small yellow"></div>
+          <div class="lens-small green"></div>
+        </div>
+        <h1 class="header-title">Catch<span>Box</span></h1>
+        <button class="header-collapse-btn" id="header-collapse" data-i18n-title="header.collapse" title="Recolher cabeçalho">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+        <button class="settings-btn" id="settings-btn" data-i18n-title="settings.title" title="Configurações">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="header-controls">
+        <div class="game-selector">
+          <label for="game-select" data-i18n="game.label">Jogo:</label>
+          <select id="game-select"></select>
+        </div>
+
+        <div class="search-bar">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input type="text" id="search-input" data-i18n-placeholder="search.placeholder" placeholder="Buscar Pokémon..." />
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-info">
+            <span id="progress-text">0 / 0</span>
+            <span id="progress-percent">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Offline banner -->
+    <div id="offline-banner" class="offline-banner hidden">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+      <span data-i18n="offline.banner">Sem conexão. Conecte-se à internet para baixar novos dados.</span>
+    </div>
+
+    <!-- Download progress bar -->
+    <div id="download-bar" class="download-bar hidden">
+      <span id="download-text" data-i18n="offline.downloading">Baixando sprites...</span>
+      <div class="download-progress">
+        <div class="download-fill" id="download-fill"></div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <main class="pokedex-main">
+      <div id="loading" class="loading">
+        <div class="pokeball-loader">
+          <div class="pokeball-top"></div>
+          <div class="pokeball-center"></div>
+          <div class="pokeball-bottom"></div>
+        </div>
+        <p data-i18n="loading.text">Carregando Pokédex...</p>
+      </div>
+      <div class="landscape-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="10" rx="2"></rect>
+          <path d="M17 7V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v3"></path>
+        </svg>
+        <span data-i18n="landscape.hint">Gire o celular para visualizar no formato 6x5 das boxes do jogo</span>
+      </div>
+      <div id="pokemon-grid" class="pokemon-grid"></div>
+    </main>
+
+    <!-- Header expand button (visible when collapsed) -->
+    <button class="header-expand-btn hidden" id="header-expand" data-i18n-title="header.expand" title="Expandir cabeçalho">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+
+    <!-- Box jump nav (floating) -->
+    <nav id="box-nav" class="box-nav hidden">
+      <button class="box-nav-prev" id="box-nav-prev" data-i18n-title="box.prev" title="Box anterior">&#9664;</button>
+      <select id="box-nav-select" class="box-nav-select"></select>
+      <button class="box-nav-next" id="box-nav-next" data-i18n-title="box.next" title="Próxima box">&#9654;</button>
+    </nav>
+
+    <!-- Detail modal -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close">&times;</button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Settings modal -->
+    <div id="settings-overlay" class="modal-overlay hidden">
+      <div class="modal-content settings-modal">
+        <button class="modal-close" id="settings-close">&times;</button>
+        <div class="settings-body">
+          <h2 class="settings-title" data-i18n="settings.title">Configurações</h2>
+
+          <div class="settings-section">
+            <h3 class="modal-section-title" data-i18n="settings.language">Idioma</h3>
+            <div id="language-options" class="settings-options"></div>
+          </div>
+
+          <div class="settings-section">
+            <h3 class="modal-section-title" data-i18n="settings.spriteStyle">Estilo de Sprite</h3>
+            <div id="sprite-style-options" class="settings-options"></div>
+          </div>
+
+          <div class="settings-section">
+            <h3 class="modal-section-title" data-i18n="settings.genderMode">Modo de Gênero</h3>
+            <div id="gender-mode-options" class="settings-options"></div>
+          </div>
+
+          <div class="settings-section">
+            <button class="share-btn" id="share-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+              <span data-i18n="share.button">Compartilhar Progresso</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share modal -->
+    <div id="share-overlay" class="modal-overlay hidden">
+      <div class="modal-content share-modal">
+        <button class="modal-close" id="share-close">&times;</button>
+        <div class="share-body">
+          <div class="share-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <h2 class="share-title" data-i18n="share.title">Compartilhar Progresso</h2>
+          <p class="share-description" data-i18n="share.description">Copie o link abaixo e abra em outro dispositivo para sincronizar seu progresso.</p>
+          <div class="share-url-box">
+            <input type="text" id="share-url" class="share-url-input" readonly />
+            <button class="share-copy-btn" id="share-copy" data-i18n="share.copy">Copiar Link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import modal -->
+    <div id="import-overlay" class="modal-overlay hidden">
+      <div class="modal-content import-modal">
+        <div class="import-body">
+          <div class="share-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h2 class="share-title" data-i18n="share.import.title">Importar Progresso</h2>
+          <p class="share-description" data-i18n="share.import.description">Progresso compartilhado detectado:</p>
+          <p class="import-stats" id="import-stats"></p>
+          <p class="import-warning" data-i18n="share.import.warning">Isso vai sobrescrever seu progresso e configurações atuais.</p>
+          <div class="import-actions">
+            <button class="import-cancel-btn" id="import-cancel" data-i18n="share.import.cancel">Cancelar</button>
+            <button class="import-confirm-btn" id="import-confirm" data-i18n="share.import.confirm">Importar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p class="footer-disclaimer" data-i18n="footer.disclaimer">
+        CatchBox is an unofficial, fan-made project. Not affiliated with, endorsed, or sponsored by Nintendo, Game Freak, Creatures Inc., or The Pok&eacute;mon Company. Pok&eacute;mon and all related names are trademarks of their respective owners.
+      </p>
+      <div class="footer-credits">
+        <a href="https://github.com/davydmaker/catchbox" target="_blank" rel="noopener" class="footer-link" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+        <span>made with <svg class="heart-icon" viewBox="0 0 24 24" fill="#EF4444" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> by <a href="https://davydmaker.com" target="_blank" rel="noopener" class="footer-link">dvd</a></span>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
