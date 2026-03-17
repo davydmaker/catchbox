@@ -10,7 +10,7 @@ import { t, getLang, setLang } from './i18n.ts';
 import { initServiceWorker, cacheSpritesForDex, cleanOldSpriteCaches, onCacheProgress, onConnectivityChange } from './cache-manager.ts';
 import { API_BATCH_SIZE, SCROLL_DEBOUNCE_MS, ENTRY_NUMBER_PAD, escapeHtml, extractGenderFromKey } from './constants.ts';
 import { getShareUrl, parseShareHash, applySharePayload, countSharedPokemon } from './share.ts';
-import { signInWithGoogle, signOutUser, onAuthChange, getCurrentUser, checkRedirectResult, type AuthUser } from './auth.ts';
+import { signInWithGoogle, signOutUser, onAuthChange, getCurrentUser, type AuthUser } from './auth.ts';
 import { initSync, startSyncForUser, stopSync, syncNow, pullFromCloud, countProgress, resolveFirstSync, onSyncStatusChange, setOnDataPulled, markDirty, type SyncStatus, type MergeOption } from './sync.ts';
 
 export interface DisplayEntry extends PokedexEntry {
@@ -741,7 +741,6 @@ function initAuth(): void {
   const syncNowBtn = document.getElementById('sync-now-btn')!;
 
   initSync();
-  checkRedirectResult();
 
   // When sync pulls new data from another device, reload the grid
   setOnDataPulled(() => {
