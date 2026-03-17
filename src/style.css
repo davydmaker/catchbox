@@ -1922,3 +1922,352 @@ body {
 .import-confirm-btn:hover {
   background: #3B82F6;
 }
+
+/* ===== Auth button ===== */
+.auth-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.auth-btn:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: #fff;
+}
+
+.auth-icon-login {
+  width: 20px;
+  height: 20px;
+}
+
+.auth-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.auth-avatar.hidden {
+  display: none;
+}
+
+.auth-btn.logged-in {
+  border-color: rgba(52, 211, 153, 0.5);
+  padding: 0;
+  cursor: default;
+}
+
+.auth-btn.logged-in:hover {
+  transform: none;
+}
+
+.auth-btn.logged-in .auth-icon-login {
+  display: none;
+}
+
+.auth-btn.logged-in .auth-avatar {
+  display: block;
+}
+
+/* ===== Logout button (header) ===== */
+.auth-logout-header-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.auth-logout-header-btn.hidden {
+  display: none;
+}
+
+.auth-logout-header-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #FCA5A5;
+}
+
+/* ===== Sync indicator ===== */
+.sync-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.sync-indicator.hidden {
+  display: none;
+}
+
+.sync-indicator .sync-icon {
+  width: 16px;
+  height: 16px;
+  transition: color 0.3s;
+}
+
+.sync-indicator.idle .sync-icon { color: rgba(255,255,255,0.45); }
+.sync-indicator.pending .sync-icon { color: #FBBF24; }
+.sync-indicator.syncing .sync-icon { color: #60A5FA; animation: syncSpin 1s linear infinite; }
+.sync-indicator.error .sync-icon { color: #EF4444; }
+.sync-indicator.offline .sync-icon { color: rgba(255,255,255,0.2); }
+
+.sync-indicator.idle .sync-icon {
+  display: none;
+}
+
+.sync-indicator.idle::after {
+  content: '✓';
+  color: rgba(255,255,255,0.5);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+@keyframes syncSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Sync now button ===== */
+.sync-now-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.sync-now-btn.hidden {
+  display: none;
+}
+
+.sync-now-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+  color: #fff;
+}
+
+.sync-now-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.sync-now-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===== Account section in settings ===== */
+.account-logged-out {
+  text-align: center;
+  padding: 12px;
+}
+
+.account-logged-out p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.google-sign-in-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.google-sign-in-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.google-sign-in-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.account-logged-in {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.account-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+
+.account-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.account-user-name {
+  color: rgba(255,255,255,0.9);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.account-user-email {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.75rem;
+}
+
+.account-sync-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+}
+
+.account-sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.account-sync-dot.idle { background: #34D399; }
+.account-sync-dot.pending { background: #FBBF24; }
+.account-sync-dot.syncing { background: #60A5FA; animation: syncDotPulse 1s ease-in-out infinite; }
+.account-sync-dot.error { background: #EF4444; }
+.account-sync-dot.offline { background: rgba(255,255,255,0.3); }
+
+@keyframes syncDotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.account-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.account-sync-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid rgba(96, 165, 250, 0.3);
+  background: rgba(96, 165, 250, 0.08);
+  color: rgba(96, 165, 250, 0.9);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.account-sync-btn:hover {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+.account-logout-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.06);
+  color: rgba(239, 68, 68, 0.8);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.account-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+/* ===== Merge modal ===== */
+.merge-modal {
+  max-width: 480px;
+}
+
+.merge-body {
+  padding: 30px;
+  text-align: center;
+}
+
+.merge-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.merge-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.8);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.merge-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.merge-btn-primary {
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(52, 211, 153, 0.1);
+  color: #34D399;
+}
+
+.merge-btn-primary:hover {
+  background: rgba(52, 211, 153, 0.18);
+  border-color: rgba(52, 211, 153, 0.6);
+}

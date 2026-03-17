@@ -121,6 +121,29 @@ const translations: Record<string, TranslationMap> = {
     'share.import.warning': 'Isso vai sobrescrever seu progresso e configura\u00e7\u00f5es atuais.',
     'share.import.confirm': 'Importar',
     'share.import.cancel': 'Cancelar',
+
+    'auth.login': 'Entrar com Google',
+    'auth.logout': 'Sair',
+    'auth.loginTitle': 'Entrar',
+    'auth.logoutTitle': 'Sair da conta',
+    'account.title': 'Conta',
+    'account.description': 'Entre com Google para sincronizar sua Pokédex entre dispositivos.',
+    'account.loggedAs': 'Conectado como',
+
+    'sync.title': 'Sincronização',
+    'sync.now': 'Sincronizar agora',
+    'sync.idle': 'Sincronizado',
+    'sync.pending': 'Mudanças pendentes',
+    'sync.syncing': 'Sincronizando...',
+    'sync.error': 'Erro ao sincronizar',
+    'sync.offline': 'Sem conexão',
+
+    'merge.title': 'Dados encontrados em ambos os dispositivos',
+    'merge.localStats': 'Este dispositivo: {games} jogo(s), {total} captura(s)',
+    'merge.cloudStats': 'Nuvem: {games} jogo(s), {total} captura(s)',
+    'merge.keepLocal': 'Manter deste dispositivo',
+    'merge.useCloud': 'Usar da nuvem',
+    'merge.union': 'Juntar tudo',
   },
 
   en: {
@@ -241,6 +264,29 @@ const translations: Record<string, TranslationMap> = {
     'share.import.warning': 'This will overwrite your current progress and settings.',
     'share.import.confirm': 'Import',
     'share.import.cancel': 'Cancel',
+
+    'auth.login': 'Sign in with Google',
+    'auth.logout': 'Sign out',
+    'auth.loginTitle': 'Sign in',
+    'auth.logoutTitle': 'Sign out',
+    'account.title': 'Account',
+    'account.description': 'Sign in with Google to sync your Pokédex across devices.',
+    'account.loggedAs': 'Signed in as',
+
+    'sync.title': 'Sync',
+    'sync.now': 'Sync now',
+    'sync.idle': 'Synced',
+    'sync.pending': 'Pending changes',
+    'sync.syncing': 'Syncing...',
+    'sync.error': 'Sync error',
+    'sync.offline': 'Offline',
+
+    'merge.title': 'Data found on both devices',
+    'merge.localStats': 'This device: {games} game(s), {total} capture(s)',
+    'merge.cloudStats': 'Cloud: {games} game(s), {total} capture(s)',
+    'merge.keepLocal': 'Keep this device',
+    'merge.useCloud': 'Use cloud data',
+    'merge.union': 'Merge all',
   },
 };
 

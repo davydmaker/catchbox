@@ -18,6 +18,7 @@ export const STORAGE_KEYS = {
   settings: 'catchbox-settings',
   progress: 'catchbox-progress',
   genderCache: 'catchbox-gender-cache',
+  syncMeta: 'catchbox-sync-meta',
 } as const;
 
 export const TYPE_COLORS: Record<string, string> = {

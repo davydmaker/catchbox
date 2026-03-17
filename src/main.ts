@@ -10,6 +10,8 @@ import { t, getLang, setLang } from './i18n.ts';
 import { initServiceWorker, cacheSpritesForDex, cleanOldSpriteCaches, onCacheProgress, onConnectivityChange } from './cache-manager.ts';
 import { API_BATCH_SIZE, SCROLL_DEBOUNCE_MS, ENTRY_NUMBER_PAD, escapeHtml, extractGenderFromKey } from './constants.ts';
 import { getShareUrl, parseShareHash, applySharePayload, countSharedPokemon } from './share.ts';
+import { signInWithGoogle, signOutUser, onAuthChange, getCurrentUser, checkRedirectResult, type AuthUser } from './auth.ts';
+import { initSync, startSyncForUser, stopSync, syncNow, pullFromCloud, countProgress, resolveFirstSync, onSyncStatusChange, setOnDataPulled, markDirty, type SyncStatus, type MergeOption } from './sync.ts';
 
 export interface DisplayEntry extends PokedexEntry {
   gender: string | null;
@@ -66,6 +68,7 @@ function init(): void {
   initServiceWorker();
   initFooterObserver();
   initShare();
+  initAuth();
 
   gameSelect.addEventListener('change', () => {
     currentGameId = gameSelect.value;
@@ -146,6 +149,7 @@ function checkImportOnLoad(): void {
 
   importConfirm.addEventListener('click', () => {
     applySharePayload(payload);
+    markDirty(); // Ensure imported data syncs to cloud
     importOverlay.classList.add('hidden');
     document.body.style.overflow = '';
     window.location.reload();
@@ -727,6 +731,175 @@ function onCaptureChangeFromModal(captureKeyVal: string, isCaptured: boolean): v
     card.classList.toggle('captured', isCaptured);
   }
   updateProgressFromDOM();
+}
+
+function initAuth(): void {
+  const authBtn = document.getElementById('auth-btn')!;
+  const authAvatar = document.getElementById('auth-avatar') as HTMLImageElement;
+  const authLogoutBtn = document.getElementById('auth-logout-btn')!;
+  const syncIndicator = document.getElementById('sync-indicator')!;
+  const syncNowBtn = document.getElementById('sync-now-btn')!;
+
+  initSync();
+  checkRedirectResult();
+
+  // When sync pulls new data from another device, reload the grid
+  setOnDataPulled(() => {
+    const s = getSettings();
+    currentGameId = s.lastGame || currentGameId;
+    gameSelect.value = currentGameId;
+    loadPokedex();
+  });
+
+  // Update sync indicator UI
+  onSyncStatusChange((status: SyncStatus) => {
+    syncIndicator.className = `sync-indicator ${status}`;
+    syncIndicator.title = t(`sync.${status}`);
+    updateAccountSyncStatus(status);
+  });
+
+  // Manual sync button
+  syncNowBtn.addEventListener('click', () => {
+    syncNow();
+  });
+
+  // Auth button: only login when logged out, no action when logged in
+  authBtn.addEventListener('click', () => {
+    if (!getCurrentUser()) {
+      signInWithGoogle();
+    }
+  });
+
+  // Logout button in header
+  authLogoutBtn.addEventListener('click', () => {
+    signOutUser();
+  });
+
+  // React to auth state changes
+  onAuthChange(async (user) => {
+    if (user) {
+      authBtn.classList.add('logged-in');
+      authAvatar.src = user.photoURL || '';
+      authAvatar.classList.toggle('hidden', !user.photoURL);
+      authLogoutBtn.classList.remove('hidden');
+      syncIndicator.classList.remove('hidden');
+      syncNowBtn.classList.remove('hidden');
+
+      // Check if merge is needed
+      try {
+        const cloudData = await pullFromCloud();
+        const localProgress = JSON.parse(localStorage.getItem('catchbox-progress') || '{}');
+        const localHasData = Object.keys(localProgress).some(k => localProgress[k]?.length > 0);
+        const cloudHasData = cloudData && Object.keys(cloudData.progress).some(k => cloudData.progress[k]?.length > 0);
+
+        if (localHasData && cloudHasData) {
+          // Both have data — show merge modal
+          showMergeModal(cloudData!);
+        } else if (cloudHasData && !localHasData) {
+          // Only cloud has data — pull silently
+          await resolveFirstSync(cloudData!, 'cloud');
+          loadPokedex();
+        } else {
+          // Only local or no data anywhere — push silently
+          await resolveFirstSync({ progress: {}, settings: {}, lastModified: null }, 'local');
+        }
+      } catch {
+        // If first sync fails, just start normal sync
+      }
+
+      startSyncForUser();
+    } else {
+      authBtn.classList.remove('logged-in');
+      authAvatar.classList.add('hidden');
+      authLogoutBtn.classList.add('hidden');
+      syncIndicator.classList.add('hidden');
+      syncNowBtn.classList.add('hidden');
+      stopSync();
+    }
+
+    renderAccountSection(user);
+  });
+}
+
+function showMergeModal(cloudData: Awaited<ReturnType<typeof pullFromCloud>>): void {
+  if (!cloudData) return;
+
+  const overlay = document.getElementById('merge-overlay')!;
+  const localStatsEl = document.getElementById('merge-local-stats')!;
+  const cloudStatsEl = document.getElementById('merge-cloud-stats')!;
+
+  const localProgress = JSON.parse(localStorage.getItem('catchbox-progress') || '{}');
+  const localStats = countProgress(localProgress);
+  const cloudStats = countProgress(cloudData.progress);
+
+  localStatsEl.textContent = t('merge.localStats')
+    .replace('{games}', String(localStats.games))
+    .replace('{total}', String(localStats.total));
+  cloudStatsEl.textContent = t('merge.cloudStats')
+    .replace('{games}', String(cloudStats.games))
+    .replace('{total}', String(cloudStats.total));
+
+  overlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+
+  const handleChoice = async (choice: MergeOption) => {
+    overlay.classList.add('hidden');
+    document.body.style.overflow = '';
+    await resolveFirstSync(cloudData, choice);
+    loadPokedex();
+  };
+
+  document.getElementById('merge-keep-local')!.addEventListener('click', () => handleChoice('local'), { once: true });
+  document.getElementById('merge-use-cloud')!.addEventListener('click', () => handleChoice('cloud'), { once: true });
+  document.getElementById('merge-union')!.addEventListener('click', () => handleChoice('union'), { once: true });
+}
+
+function renderAccountSection(user: AuthUser | null): void {
+  const container = document.getElementById('account-content')!;
+
+  if (!user) {
+    container.innerHTML = `
+      <div class="account-logged-out">
+        <p>${t('account.description')}</p>
+        <button class="google-sign-in-btn" id="account-login-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+          </svg>
+          ${t('auth.login')}
+        </button>
+      </div>
+    `;
+    document.getElementById('account-login-btn')?.addEventListener('click', () => signInWithGoogle());
+  } else {
+    container.innerHTML = `
+      <div class="account-logged-in">
+        <div class="account-user-info">
+          ${user.photoURL ? `<img class="account-user-avatar" src="${escapeHtml(user.photoURL)}" alt="" referrerpolicy="no-referrer" />` : ''}
+          <div>
+            <div class="account-user-name">${escapeHtml(user.displayName || '')}</div>
+            <div class="account-user-email">${escapeHtml(user.email || '')}</div>
+          </div>
+        </div>
+        <div class="account-sync-status" id="account-sync-status">
+          <span class="account-sync-dot idle" id="account-sync-dot"></span>
+          <span id="account-sync-text">${t('sync.idle')}</span>
+        </div>
+        <div class="account-actions">
+          <button class="account-sync-btn" id="account-sync-btn">${t('sync.now')}</button>
+          <button class="account-logout-btn" id="account-logout-btn">${t('auth.logout')}</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('account-sync-btn')?.addEventListener('click', () => syncNow());
+    document.getElementById('account-logout-btn')?.addEventListener('click', () => signOutUser());
+  }
+}
+
+function updateAccountSyncStatus(status: SyncStatus): void {
+  const dot = document.getElementById('account-sync-dot');
+  const text = document.getElementById('account-sync-text');
+  if (dot) dot.className = `account-sync-dot ${status}`;
+  if (text) text.textContent = t(`sync.${status}`);
 }
 
 init();

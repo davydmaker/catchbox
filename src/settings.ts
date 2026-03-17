@@ -1,4 +1,5 @@
 import { STORAGE_KEYS, SPRITES_BASE_URL } from './constants.ts';
+import { emit } from './events.ts';
 
 const SETTINGS_KEY = STORAGE_KEYS.settings;
 
@@ -102,6 +103,7 @@ export function getSettings(): Settings {
 
 export function saveSettings(settings: Settings): void {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  emit('data-changed');
 }
 
 export function getSpriteStyle(): SpriteStyle {

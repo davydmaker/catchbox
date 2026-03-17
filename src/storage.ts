@@ -1,4 +1,5 @@
 import { STORAGE_KEYS, extractGenderFromKey } from './constants.ts';
+import { emit } from './events.ts';
 
 const STORAGE_KEY = STORAGE_KEYS.progress;
 
@@ -16,6 +17,7 @@ function getAll(): StorageData {
 
 function saveAll(data: StorageData): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  emit('data-changed');
 }
 
 export function getCaptured(gameId: string): Set<string> {
