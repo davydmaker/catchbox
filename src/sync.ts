@@ -84,7 +84,7 @@ function setLocalSettings(data: Record<string, string>): void {
   localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(data));
 }
 
-function getLastSyncTime(): number {
+export function getLastSyncTime(): number {
   try {
     return parseInt(localStorage.getItem(SYNC_META_KEY) || '0', 10);
   } catch {

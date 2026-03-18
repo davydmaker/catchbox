@@ -11,7 +11,7 @@ import { initServiceWorker, cacheSpritesForDex, cleanOldSpriteCaches, onCachePro
 import { API_BATCH_SIZE, SCROLL_DEBOUNCE_MS, ENTRY_NUMBER_PAD, escapeHtml, extractGenderFromKey } from './constants.ts';
 import { getShareUrl, parseShareHash, applySharePayload, countSharedPokemon } from './share.ts';
 import { signInWithGoogle, signOutUser, onAuthChange, getCurrentUser, type AuthUser } from './auth.ts';
-import { initSync, startSyncForUser, stopSync, syncNow, pullFromCloud, countProgress, resolveFirstSync, onSyncStatusChange, setOnDataPulled, markDirty, type SyncStatus, type MergeOption } from './sync.ts';
+import { initSync, startSyncForUser, stopSync, syncNow, pullFromCloud, countProgress, resolveFirstSync, onSyncStatusChange, setOnDataPulled, markDirty, getLastSyncTime, mergeUnion, type SyncStatus, type MergeOption } from './sync.ts';
 
 export interface DisplayEntry extends PokedexEntry {
   gender: string | null;
@@ -786,13 +786,21 @@ function initAuth(): void {
 
       // Check if merge is needed
       try {
+        const lastSync = getLastSyncTime();
         const cloudData = await pullFromCloud();
         const localProgress = JSON.parse(localStorage.getItem('catchbox-progress') || '{}');
         const localHasData = Object.keys(localProgress).some(k => localProgress[k]?.length > 0);
         const cloudHasData = cloudData && Object.keys(cloudData.progress).some(k => cloudData.progress[k]?.length > 0);
 
-        if (localHasData && cloudHasData) {
-          // Both have data — show merge modal
+        if (lastSync > 0) {
+          // Already synced before — merge silently
+          if (cloudHasData) {
+            const merged = mergeUnion(localProgress, cloudData!.progress);
+            localStorage.setItem('catchbox-progress', JSON.stringify(merged));
+            loadPokedex();
+          }
+        } else if (localHasData && cloudHasData) {
+          // First time — both have data — show merge modal
           showMergeModal(cloudData!);
         } else if (cloudHasData && !localHasData) {
           // Only cloud has data — pull silently
