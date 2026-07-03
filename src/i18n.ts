@@ -105,6 +105,8 @@ const translations: Record<string, TranslationMap> = {
     'offline.banner': 'Sem conex\u00e3o. Conecte-se \u00e0 internet para baixar novos dados.',
     'offline.downloading': 'Baixando sprites...',
     'footer.disclaimer': 'CatchBox \u00e9 um projeto n\u00e3o oficial, feito por f\u00e3s. N\u00e3o \u00e9 afiliado, endossado ou patrocinado pela Nintendo, Game Freak, Creatures Inc. ou The Pok\u00e9mon Company. Pok\u00e9mon e todos os nomes relacionados s\u00e3o marcas registradas de seus respectivos propriet\u00e1rios.',
+    'footer.terms': 'Termos de Uso',
+    'footer.privacy': 'Pol\u00edtica de Privacidade',
 
     'offline.noSprite': 'Sem sprite neste estilo',
     'offline.noSpriteShort': 'Sem sprite',
@@ -248,6 +250,8 @@ const translations: Record<string, TranslationMap> = {
     'offline.banner': 'No connection. Connect to the internet to download new data.',
     'offline.downloading': 'Downloading sprites...',
     'footer.disclaimer': 'CatchBox is an unofficial, fan-made project. Not affiliated with, endorsed, or sponsored by Nintendo, Game Freak, Creatures Inc., or The Pok\u00e9mon Company. Pok\u00e9mon and all related names are trademarks of their respective owners.',
+    'footer.terms': 'Terms of Use',
+    'footer.privacy': 'Privacy Policy',
 
     'offline.noSprite': 'No sprite for this style',
     'offline.noSpriteShort': 'No sprite',

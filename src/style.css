@@ -1770,6 +1770,88 @@ body {
   vertical-align: middle;
 }
 
+.footer-legal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.7rem;
+}
+
+.footer-legal-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-legal-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer-legal-sep {
+  color: rgba(255,255,255,0.2);
+}
+
+/* ===== Legal modals (Terms / Privacy) ===== */
+.legal-modal {
+  max-width: 640px;
+}
+
+.legal-content {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  padding: 32px 32px 36px;
+}
+
+.legal-content h2 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin: 0 0 4px;
+  padding-right: 32px;
+}
+
+.legal-content h3 {
+  font-size: 1rem;
+  color: #fff;
+  margin: 24px 0 6px;
+}
+
+.legal-content p {
+  margin: 0 0 12px;
+}
+
+.legal-content ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.legal-content li {
+  margin-bottom: 6px;
+}
+
+.legal-content a {
+  color: #f87171;
+  text-decoration: none;
+}
+
+.legal-content a:hover {
+  text-decoration: underline;
+}
+
+.legal-content .legal-updated {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+}
+
 /* ===== Share button ===== */
 .share-btn {
   display: flex;

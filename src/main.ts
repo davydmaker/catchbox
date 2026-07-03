@@ -10,6 +10,7 @@ import { t, getLang, setLang } from './i18n.ts';
 import { initServiceWorker, cacheSpritesForDex, cleanOldSpriteCaches, onCacheProgress, onConnectivityChange } from './cache-manager.ts';
 import { API_BATCH_SIZE, SCROLL_DEBOUNCE_MS, ENTRY_NUMBER_PAD, escapeHtml, extractGenderFromKey } from './constants.ts';
 import { getShareUrl, parseShareHash, applySharePayload, countSharedPokemon } from './share.ts';
+import { getTermsHtml, getPrivacyHtml } from './legal.ts';
 import { signInWithGoogle, signOutUser, onAuthChange, getCurrentUser, type AuthUser } from './auth.ts';
 import { initSync, startSyncForUser, stopSync, syncNow, pullFromCloud, countProgress, resolveFirstSync, onSyncStatusChange, setOnDataPulled, markDirty, getLastSyncTime, mergeUnion, type SyncStatus, type MergeOption } from './sync.ts';
 
@@ -68,6 +69,7 @@ function init(): void {
   initServiceWorker();
   initFooterObserver();
   initShare();
+  initLegal();
   initAuth();
 
   gameSelect.addEventListener('change', () => {
@@ -127,6 +129,34 @@ function initShare(): void {
 
   shareUrlInput.addEventListener('click', () => {
     shareUrlInput.select();
+  });
+}
+
+function initLegal(): void {
+  const openLegal = (overlayId: string, bodyId: string, html: string) => {
+    const settingsOverlay = document.getElementById('settings-overlay')!;
+    settingsOverlay.classList.add('hidden');
+    document.getElementById(bodyId)!.innerHTML = html;
+    document.getElementById(overlayId)!.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const legalModals: Array<{ btn: string; overlay: string; close: string; body: string; html: () => string }> = [
+    { btn: 'terms-btn', overlay: 'terms-overlay', close: 'terms-close', body: 'terms-body', html: () => getTermsHtml(getLang()) },
+    { btn: 'privacy-btn', overlay: 'privacy-overlay', close: 'privacy-close', body: 'privacy-body', html: () => getPrivacyHtml(getLang()) },
+  ];
+
+  legalModals.forEach(({ btn, overlay, close, body, html }) => {
+    const overlayEl = document.getElementById(overlay)!;
+    const closeModal = () => {
+      overlayEl.classList.add('hidden');
+      document.body.style.overflow = '';
+    };
+    document.getElementById(btn)!.addEventListener('click', () => openLegal(overlay, body, html()));
+    document.getElementById(close)!.addEventListener('click', closeModal);
+    overlayEl.addEventListener('click', (e) => {
+      if (e.target === overlayEl) closeModal();
+    });
   });
 }
 

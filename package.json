@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/davydmaker/catchbox"
   },
-  "author": "Davyd Maker (https://davydmaker.com)",
+  "author": "Beater Studios (https://beaterstudios.com)",
   "type": "module",
   "scripts": {
     "dev": "vite",
