@@ -1739,6 +1739,40 @@ body {
   margin: 0 auto 16px;
 }
 
+.kofi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
+  margin: 0 auto 20px;
+  background: #ff5e5b;
+  color: #fff;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.kofi-btn:hover {
+  background: #ff7370;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255,94,91,0.35);
+}
+
+.kofi-btn:active {
+  transform: translateY(0);
+}
+
+.kofi-btn-icon {
+  width: 17px;
+  height: 17px;
+}
+
 .footer-credits {
   display: flex;
   align-items: center;

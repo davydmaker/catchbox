@@ -107,6 +107,7 @@ const translations: Record<string, TranslationMap> = {
     'footer.disclaimer': 'CatchBox \u00e9 um projeto n\u00e3o oficial, feito por f\u00e3s. N\u00e3o \u00e9 afiliado, endossado ou patrocinado pela Nintendo, Game Freak, Creatures Inc. ou The Pok\u00e9mon Company. Pok\u00e9mon e todos os nomes relacionados s\u00e3o marcas registradas de seus respectivos propriet\u00e1rios.',
     'footer.terms': 'Termos de Uso',
     'footer.privacy': 'Pol\u00edtica de Privacidade',
+    'footer.kofi': 'Apoie no Ko-fi',
 
     'offline.noSprite': 'Sem sprite neste estilo',
     'offline.noSpriteShort': 'Sem sprite',
@@ -252,6 +253,7 @@ const translations: Record<string, TranslationMap> = {
     'footer.disclaimer': 'CatchBox is an unofficial, fan-made project. Not affiliated with, endorsed, or sponsored by Nintendo, Game Freak, Creatures Inc., or The Pok\u00e9mon Company. Pok\u00e9mon and all related names are trademarks of their respective owners.',
     'footer.terms': 'Terms of Use',
     'footer.privacy': 'Privacy Policy',
+    'footer.kofi': 'Support on Ko-fi',
 
     'offline.noSprite': 'No sprite for this style',
     'offline.noSpriteShort': 'No sprite',
